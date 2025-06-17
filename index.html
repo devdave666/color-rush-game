@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Rush - Fast-Paced Reflex Game</title>
+
+    <!-- SEO and Social Sharing Tags -->
+    <meta name="description" content="Test your reflexes in Color Rush, a fast-paced game where you match the color to the word before time runs out! How high can you score? Play free online.">
+    <meta name="keywords" content="color game, reaction game, reflex game, online game, free game, html5 game, browser game, tap game, speed game, color rush, adsense game, brain game, high score game">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-live-url-here.com/">
+    <meta property="og:title" content="Color Rush - Fast-Paced Reflex Game">
+    <meta property="og:description" content="Test your reflexes in Color Rush, a fast-paced game where you match the color to the word before time runs out! How high can you score?">
+    <meta property="og:image" content="https://placehold.co/1200x630/1a1a2e/e94560?text=Color+Rush">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://your-live-url-here.com/">
+    <meta property="twitter:title" content="Color Rush - Fast-Paced Reflex Game">
+    <meta property="twitter:description" content="Test your reflexes in Color Rush, a fast-paced game where you match the color to the word before time runs out! How high can you score?">
+    <meta property="twitter:image" content="https://placehold.co/1200x630/1a1a2e/e94560?text=Color+Rush">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AdSense for H5 Games Script with your Publisher ID -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6398161093512510"
+        crossorigin="anonymous" data-full-width-responsive="true"></script>
+    
+    <!-- Ad Placement API initialization for interstitial ads -->
+    <script>
+      window.adsbygoogle = window.adsbygoogle || [];
+      const adBreak = adConfig = function(o) {
+        adsbygoogle.push(o);
+      }
+    </script>
+    
+    <style>
+        :root {
+            --bg-color: #1a1a2e;
+            --primary-color: #16213e;
+            --secondary-color: #0f3460;
+            --accent-color: #e94560;
+            --text-color: #dcdcdc;
+            --white: #ffffff;
+            --font-family: 'Poppins', sans-serif;
+            --green-glow: #2ecc71;
+            --red-glow: #e74c3c;
+        }
+
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            perspective: 1500px;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Main Layout Wrapper for Game and Side Ads */
+        .page-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Side Ad Container styling */
+        .side-ad-container {
+            width: 160px; /* Standard vertical banner width */
+            height: 600px; /* Standard vertical banner height */
+            background-color: rgba(0,0,0,0.1); /* Placeholder background */
+            border-radius: 15px;
+            display: none; /* Hidden by default on small screens */
+            flex-shrink: 0;
+        }
+
+        /* Main Game Container */
+        .game-container {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(22, 33, 62, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0; /* Prevents game from shrinking */
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+        
+        /* Media Query to show side ads on larger screens */
+        @media (min-width: 900px) {
+            .side-ad-container {
+                display: block;
+            }
+        }
+
+
+        /* Score and Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .score-container {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        #score {
+            color: var(--accent-color);
+            font-weight: 700;
+            text-shadow: 0 0 5px var(--accent-color);
+        }
+
+        /* Color Word Display */
+        .color-word-container {
+            margin-bottom: 2rem;
+        }
+
+        #color-word {
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        /* Color Buttons */
+        .color-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .color-btn {
+            border: none;
+            padding: 1.5rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .color-btn:hover {
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.3);
+        }
+
+        .color-btn:active {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3), inset 0 3px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* Timer Bar */
+        #timer-bar-container {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #timer-bar {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, var(--accent-color), #f07b3f);
+            border-radius: 5px;
+        }
+        
+        /* Start/Game Over Modal */
+        .modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(22, 33, 62, 0.85);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .modal-content h2 {
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(255,255,255,0.7);
+        }
+        
+        #final-score {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+        }
+        
+        .start-btn, .restart-btn {
+            background-color: var(--accent-color);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .start-btn:hover, .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.6);
+        }
+        
+        /* Correct/Incorrect feedback animations */
+        .correct {
+            animation: correct-glow 0.4s ease-out;
+        }
+
+        .incorrect {
+            animation: incorrect-shake 0.5s ease-out;
+        }
+
+        @keyframes correct-glow {
+            0%, 100% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); }
+            50% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 30px var(--green-glow); }
+        }
+
+        @keyframes incorrect-shake {
+            0%, 100% { transform: translateX(0); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+            20%, 40%, 60%, 80% { transform: translateX(8px); }
+            50% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 30px var(--red-glow); }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="page-wrapper" id="page-wrapper">
+        <!-- Left Side Ad -->
+        <div class="side-ad-container left-ad">
+            <!-- color-rush-left-side -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:160px;height:600px"
+                 data-ad-client="ca-pub-6398161093512510"
+                 data-ad-slot="1866472161"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div class="game-container" id="game-container">
+            <!-- Game Header -->
+            <div class="header">
+                <h2 class="title">Color Rush</h2>
+                <div class="score-container">Score: <span id="score">0</span></div>
+            </div>
+
+            <!-- Color Word Display -->
+            <div class="color-word-container">
+                <h1 id="color-word">Press Start</h1>
+            </div>
+
+            <!-- Color Buttons -->
+            <div class="color-buttons" id="color-buttons">
+                 <!-- Buttons will be generated by JS -->
+            </div>
+
+            <!-- Timer Bar -->
+            <div id="timer-bar-container">
+                <div id="timer-bar"></div>
+            </div>
+
+            <!-- Start/Game Over Modal -->
+            <div id="start-modal" class="modal">
+                <div class="modal-content">
+                    <h2>Welcome to Color Rush!</h2>
+                    <button id="start-btn" class="start-btn">Start Game</button>
+                </div>
+            </div>
+            
+            <div id="game-over-modal" class="modal hidden">
+                 <div class="modal-content">
+                    <h2>Game Over!</h2>
+                    <p id="final-score">Your Score: 0</p>
+                    <button id="restart-btn" class="restart-btn">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+         <!-- Right Side Ad -->
+        <div class="side-ad-container right-ad">
+            <!-- color-rush-right-side -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:160px;height:600px"
+                 data-ad-client="ca-pub-6398161093512510"
+                 data-ad-slot="8082163201"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const scoreEl = document.getElementById('score');
+        const colorWordEl = document.getElementById('color-word');
+        const colorButtonsEl = document.getElementById('color-buttons');
+        const timerBarEl = document.getElementById('timer-bar');
+        const startModal = document.getElementById('start-modal');
+        const gameOverModal = document.getElementById('game-over-modal');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const finalScoreEl = document.getElementById('final-score');
+        const gameContainer = document.getElementById('game-container');
+        const pageWrapper = document.getElementById('page-wrapper');
+
+        // Game state
+        let score = 0;
+        let timerInterval;
+        let timeRemaining = 5000;
+        let timeReduction = 100;
+
+        // Audio state
+        let audioCtx;
+
+        const colors = [
+            { name: 'Red', value: '#e74c3c' }, { name: 'Blue', value: '#3498db' },
+            { name: 'Green', value: '#2ecc71' }, { name: 'Yellow', value: '#f1c40f' },
+            { name: 'Purple', value: '#9b59b6' }, { name: 'Orange', value: '#e67e22' },
+            { name: 'Pink', value: '#ff79c6' }, { name: 'Cyan', value: '#00bcd4' },
+        ];
+
+        let currentCorrectColor;
+
+        /**
+         * Initializes the Web Audio API context.
+         * Must be called after a user interaction.
+         */
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        /**
+         * Plays a sound effect using Web Audio API.
+         * @param {string} type - 'correct', 'incorrect', or 'start'.
+         */
+        function playSound(type) {
+            if (!audioCtx) return;
+
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.01); // Quick attack
+
+            if (type === 'correct') {
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.1);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+            } else if (type === 'incorrect') {
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(200, audioCtx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.2);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+            } else if (type === 'start') {
+                 oscillator.type = 'triangle';
+                 oscillator.frequency.setValueAtTime(300, audioCtx.currentTime);
+                 gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+            }
+
+            oscillator.start(audioCtx.currentTime);
+            oscillator.stop(audioCtx.currentTime + 0.3);
+        }
+
+        /**
+         * Shuffles an array in place.
+         */
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        /**
+         * Starts the game.
+         */
+        function startGame() {
+            initAudio(); // Initialize audio on user interaction
+            playSound('start');
+            startModal.classList.add('hidden');
+            gameOverModal.classList.add('hidden');
+            score = 0;
+            timeRemaining = 5000;
+            updateScore(0);
+            nextRound();
+        }
+
+        /**
+         * Sets up the next round.
+         */
+        function nextRound() {
+            const roundColors = shuffle([...colors]).slice(0, 4);
+            currentCorrectColor = roundColors[Math.floor(Math.random() * 4)];
+            colorWordEl.textContent = currentCorrectColor.name;
+            const randomColorForText = roundColors[Math.floor(Math.random() * 4)];
+            colorWordEl.style.color = randomColorForText.value;
+
+            colorButtonsEl.innerHTML = '';
+            shuffle(roundColors).forEach(color => {
+                const button = document.createElement('button');
+                button.classList.add('color-btn');
+                button.style.backgroundColor = color.value;
+                button.dataset.colorName = color.name;
+                button.addEventListener('click', handleColorClick);
+                colorButtonsEl.appendChild(button);
+            });
+
+            startTimer();
+        }
+
+        /**
+         * Handles the user's color choice.
+         */
+        function handleColorClick(e) {
+            clearInterval(timerInterval);
+            const selectedColor = e.target.dataset.colorName;
+
+            if (selectedColor === currentCorrectColor.name) {
+                playSound('correct');
+                updateScore(score + 1);
+                gameContainer.classList.add('correct');
+                setTimeout(() => gameContainer.classList.remove('correct'), 400);
+                if (timeRemaining > 1500) { timeRemaining -= timeReduction; }
+                setTimeout(nextRound, 200);
+            } else {
+                playSound('incorrect');
+                gameContainer.classList.add('incorrect');
+                setTimeout(() => gameContainer.classList.remove('incorrect'), 500);
+                endGame();
+            }
+        }
+        
+        /**
+         * Starts the round timer bar.
+         */
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerBarEl.style.transition = 'none';
+            timerBarEl.style.width = '100%';
+            
+            void timerBarEl.offsetWidth; // Force reflow
+            
+            timerBarEl.style.transition = `width ${timeRemaining / 1000}s linear`;
+            timerBarEl.style.width = '0%';
+            
+            timerInterval = setInterval(() => {
+                // This interval now only checks if time has truly run out
+                endGame();
+            }, timeRemaining);
+        }
+
+        /**
+         * Updates the score display.
+         */
+        function updateScore(newScore) {
+            score = newScore;
+            scoreEl.textContent = score;
+        }
+
+        /**
+         * Shows the game over screen after the ad.
+         */
+        function showGameOverScreen() {
+             finalScoreEl.textContent = `Your Score: ${score}`;
+             gameOverModal.classList.remove('hidden');
+             colorWordEl.textContent = "Game Over!";
+             colorWordEl.style.color = 'var(--text-color)';
+        }
+
+        /**
+         * Ends the game and requests an ad.
+         */
+        function endGame() {
+            clearInterval(timerInterval);
+            
+            // **BUG FIX**: Stop the CSS transition by freezing the width
+            const currentWidth = getComputedStyle(timerBarEl).width;
+            timerBarEl.style.transition = 'none';
+            timerBarEl.style.width = currentWidth;
+            
+            console.log('Game ended. Requesting ad...');
+
+            adBreak({
+                type: 'next',
+                name: 'game-over-ad',
+                adBreakDone: (placementInfo) => {
+                    console.log('Ad break finished.');
+                    showGameOverScreen();
+                },
+            });
+        }
+
+        /**
+         * Adds 3D tilt effect on mouse move.
+         */
+        pageWrapper.addEventListener('mousemove', (e) => {
+            const { width, height } = pageWrapper.getBoundingClientRect();
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            
+            const rotateX = -((mouseY / height) - 0.5) * 15; // Max 7.5 deg tilt
+            const rotateY = ((mouseX / width) - 0.5) * 15; // Max 7.5 deg tilt
+
+            gameContainer.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        // Event Listeners
+        startBtn.addEventListener('click', startGame);
+        restartBtn.addEventListener('click', startGame);
+
+    </script>
+</body>
+</html>
