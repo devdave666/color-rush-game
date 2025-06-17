@@ -11,14 +11,14 @@
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://your-live-url-here.com/">
+    <meta property="og:url" content="https://devdave666.github.io/color-rush-game/">
     <meta property="og:title" content="Color Rush - Fast-Paced Reflex Game">
     <meta property="og:description" content="Test your reflexes in Color Rush, a fast-paced game where you match the color to the word before time runs out! How high can you score?">
     <meta property="og:image" content="https://placehold.co/1200x630/1a1a2e/e94560?text=Color+Rush">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://your-live-url-here.com/">
+    <meta property="twitter:url" content="https://devdave666.github.io/color-rush-game/">
     <meta property="twitter:title" content="Color Rush - Fast-Paced Reflex Game">
     <meta property="twitter:description" content="Test your reflexes in Color Rush, a fast-paced game where you match the color to the word before time runs out! How high can you score?">
     <meta property="twitter:image" content="https://placehold.co/1200x630/1a1a2e/e94560?text=Color+Rush">
@@ -367,6 +367,7 @@
         let timerInterval;
         let timeRemaining = 5000;
         let timeReduction = 100;
+        let gameIsOver = false; // Prevents multiple clicks during game over
 
         // Audio state
         let audioCtx;
@@ -440,6 +441,7 @@
          * Starts the game.
          */
         function startGame() {
+            gameIsOver = false; // Reset the game over state
             initAudio(); // Initialize audio on user interaction
             playSound('start');
             startModal.classList.add('hidden');
@@ -477,6 +479,8 @@
          * Handles the user's color choice.
          */
         function handleColorClick(e) {
+            if (gameIsOver) return; // If game is already over, ignore clicks
+
             clearInterval(timerInterval);
             const selectedColor = e.target.dataset.colorName;
 
@@ -488,6 +492,7 @@
                 if (timeRemaining > 1500) { timeRemaining -= timeReduction; }
                 setTimeout(nextRound, 200);
             } else {
+                gameIsOver = true; // Lock the game
                 playSound('incorrect');
                 gameContainer.classList.add('incorrect');
                 setTimeout(() => gameContainer.classList.remove('incorrect'), 500);
@@ -509,7 +514,7 @@
             timerBarEl.style.width = '0%';
             
             timerInterval = setInterval(() => {
-                // This interval now only checks if time has truly run out
+                if (gameIsOver) return; // Prevent timer from ending game twice
                 endGame();
             }, timeRemaining);
         }
@@ -536,9 +541,12 @@
          * Ends the game and requests an ad.
          */
         function endGame() {
+            if (gameIsOver) return; // Prevent endGame from running multiple times
+            gameIsOver = true; // Lock the game state
+
             clearInterval(timerInterval);
             
-            // **BUG FIX**: Stop the CSS transition by freezing the width
+            // Freeze the timer bar's CSS transition
             const currentWidth = getComputedStyle(timerBarEl).width;
             timerBarEl.style.transition = 'none';
             timerBarEl.style.width = currentWidth;
